@@ -13,7 +13,7 @@ u.x+=sin(v.y*90.+tm*2.6)*.0024*k*amt;u.y+=sin(v.x*70.+tm*2.1)*.0016*k*amt;
 vec3 c=texture2D(s,u).rgb;
 float ca=pow(max(0.,sin(v.x*38.+tm*1.3+sin(v.y*30.+tm))*sin(v.y*34.-tm*1.7)),6.)*.12*k*amt;c+=vec3(ca*.6,ca,ca);
 c+=texture2D(bl,vec2(v.x,1.-v.y)).rgb*bloom;
-float vg=smoothstep(1.2,.4,length(v-.5)*1.3);c*=mix(.8,1.,vg);gl_FragColor=vec4(c,1.);}`;
+float vg=1.-smoothstep(.4,1.2,length(v-.5)*1.3);c*=mix(.8,1.,vg);gl_FragColor=vec4(c,1.);}`;
 
 export function createPostFX() {
   try {

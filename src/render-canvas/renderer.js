@@ -9,7 +9,7 @@ import { buildSprites, buildTiles } from './sprites.js';
 import { createPostFX } from './postfx.js';
 
 const FONT = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif';
-const fmt = t => { if (t == null) return '--:--.-'; const m = Math.floor(t / 60), s = t - m * 60; return `${String(m).padStart(2, '0')}:${s.toFixed(1).padStart(4, '0')}`; };
+const fmt = t => { if (t == null) return '--:--.-'; const d = Math.round(t * 10), m = Math.floor(d / 600), s = (d % 600) / 10; return `${String(m).padStart(2, '0')}:${s.toFixed(1).padStart(4, '0')}`; };
 
 export function createRenderer(canvas, game) {
   const ctx = canvas.getContext('2d');

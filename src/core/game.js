@@ -222,6 +222,7 @@ export function createGame({ audio, host = {} }) {
     updatePlayer(g, dt);
     if (g.scene !== 'playing') return;
     updateEntities(g, dt);
+    if (g.scene !== 'playing') return; // 同一幀先敗北時，不讓 Boss 死亡動畫改判勝利
     if (g.boss) updateBoss(g, dt);
     if (g.scene !== 'playing') return;
     g.runTime += dt;

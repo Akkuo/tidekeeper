@@ -82,8 +82,9 @@ const want = process.argv.slice(2).map(Number).filter(Boolean);
 fs.mkdirSync(path.join(here, 'routes'), { recursive: true });
 for (const n of want.length ? want : [1, 2, 3, 4, 5, 6]) {
   const t0 = Date.now(), acts = search(n - 1);
-  if (!acts) { console.log(`L${n}: 找不到通關序列（${((Date.now() - t0) / 1000).toFixed(0)}s）`); continue; }
+  if (!acts) { console.log(`L${n}: 找不到通關序列（${((Date.now() - t0) / 1000).toFixed(0)}s）`); process.exitCode = 1; continue; }
   const r = replay(n - 1, acts);
+  if (r.scene !== (n === 6 ? 'win' : 'clear')) { console.error(`L${n}: 重播未通關（${r.scene}）`); process.exitCode = 1; continue; }
   fs.writeFileSync(path.join(here, 'routes', `L${n}.json`), JSON.stringify({ level: n, frames: r.frames.length, result: r.scene, time: r.time, input: rle(r.frames) }));
   console.log(`L${n}: 重播結果=${r.scene} 輸入幀數=${r.frames.length} 通關時間=${r.time}s 潮之珠=${r.pearls} 最低HP=${r.minHp}${r.boss ? ' boss=' + r.boss : ''}（搜尋 ${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 }

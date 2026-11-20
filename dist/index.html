@@ -934,6 +934,7 @@ function createGame({ audio, host = {} }) {
     updatePlayer(g, dt);
     if (g.scene !== 'playing') return;
     updateEntities(g, dt);
+    if (g.scene !== 'playing') return; // 同一幀先敗北時，不讓 Boss 死亡動畫改判勝利
     if (g.boss) updateBoss(g, dt);
     if (g.scene !== 'playing') return;
     g.runTime += dt;
@@ -1243,7 +1244,7 @@ u.x+=sin(v.y*90.+tm*2.6)*.0024*k*amt;u.y+=sin(v.x*70.+tm*2.1)*.0016*k*amt;
 vec3 c=texture2D(s,u).rgb;
 float ca=pow(max(0.,sin(v.x*38.+tm*1.3+sin(v.y*30.+tm))*sin(v.y*34.-tm*1.7)),6.)*.12*k*amt;c+=vec3(ca*.6,ca,ca);
 c+=texture2D(bl,vec2(v.x,1.-v.y)).rgb*bloom;
-float vg=smoothstep(1.2,.4,length(v-.5)*1.3);c*=mix(.8,1.,vg);gl_FragColor=vec4(c,1.);}`;
+float vg=1.-smoothstep(.4,1.2,length(v-.5)*1.3);c*=mix(.8,1.,vg);gl_FragColor=vec4(c,1.);}`;
 
 function createPostFX() {
   try {
@@ -1325,7 +1326,7 @@ const { buildSprites, buildTiles } = __m["src/render-canvas/sprites.js"];
 const { createPostFX } = __m["src/render-canvas/postfx.js"];
 
 const FONT = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif';
-const fmt = t => { if (t == null) return '--:--.-'; const m = Math.floor(t / 60), s = t - m * 60; return `${String(m).padStart(2, '0')}:${s.toFixed(1).padStart(4, '0')}`; };
+const fmt = t => { if (t == null) return '--:--.-'; const d = Math.round(t * 10), m = Math.floor(d / 600), s = (d % 600) / 10; return `${String(m).padStart(2, '0')}:${s.toFixed(1).padStart(4, '0')}`; };
 
 function createRenderer(canvas, game) {
   const ctx = canvas.getContext('2d');
